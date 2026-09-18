@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useAuth } from '../context/AuthContext';
+import { useAuth, getDefaultRouteForRole } from '../context/AuthContext';
 import {
   Sparkles,
   ArrowRight,
@@ -15,12 +15,10 @@ import {
   Truck,
   Bot,
   QrCode,
-  Store,
   CheckCircle2,
   Crown,
   MonitorSmartphone,
   Clock,
-  ExternalLink,
   Lock,
   Flame,
 } from 'lucide-react';
@@ -37,12 +35,6 @@ export default function LandingPage() {
           Enterprise SaaS 2.0
         </span>
         <span className="font-medium">The Complete Petpooja OS Alternative for Multi-Outlet Restaurant Chains</span>
-        <Link
-          href="/super-admin"
-          className="hidden sm:inline-flex items-center gap-1 underline underline-offset-2 hover:text-black font-extrabold ml-1"
-        >
-          Super Admin Console <ArrowRight className="w-3.5 h-3.5" />
-        </Link>
       </div>
 
       {/* ─── 2. Sticky Glass Navbar (Light Mode) ─────────────────────────── */}
@@ -75,33 +67,27 @@ export default function LandingPage() {
             <a href="#architecture" className="hover:text-amber-600 transition-colors">Architecture</a>
           </nav>
 
-          {/* Right CTAs */}
+          {/* Right CTAs - Single Unified Login */}
           <div className="flex items-center gap-3">
             {user ? (
               <Link
-                href="/dashboard"
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-700 hover:bg-emerald-100 text-xs font-bold transition-all shadow-xs"
+                href={user.role === 'SUPER_ADMIN' ? '/super-admin' : getDefaultRouteForRole(user.role)}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-700 hover:bg-emerald-100 text-xs font-bold transition-all shadow-xs"
               >
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                <span>Dashboard ({user.name})</span>
+                <span>{user.role === 'SUPER_ADMIN' ? 'Admin Console' : 'Dashboard'} ({user.name})</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             ) : (
               <Link
                 href="/login"
-                className="hidden sm:flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition-all shadow-xs"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white text-xs font-extrabold shadow-md shadow-amber-500/25 transition-all hover:scale-[1.02] active:scale-[0.98]"
               >
-                <span>Staff Login</span>
+                <Lock className="w-3.5 h-3.5" />
+                <span>Login</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             )}
-
-            <Link
-              href="/super-admin"
-              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white text-xs font-extrabold shadow-md shadow-amber-500/25 transition-all hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <Crown className="w-3.5 h-3.5" />
-              <span>Platform Owner</span>
-            </Link>
           </div>
         </div>
       </header>
@@ -135,33 +121,15 @@ export default function LandingPage() {
             integrations, and a <strong>Bilingual AI Copilot</strong>.
           </p>
 
-          {/* CTA Button Group */}
+          {/* CTA Button Group - Single Unified Entry */}
           <div className="flex flex-wrap items-center justify-center gap-4 mb-16">
             <Link
-              href="/login"
-              className="px-7 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-extrabold text-sm shadow-xl shadow-amber-500/25 flex items-center gap-2.5 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              href={user ? (user.role === 'SUPER_ADMIN' ? '/super-admin' : getDefaultRouteForRole(user.role)) : '/login'}
+              className="px-8 py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white font-extrabold text-sm shadow-xl shadow-amber-500/25 flex items-center gap-2.5 transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Zap className="w-4 h-4 fill-white" />
-              <span>Launch POS Terminal</span>
+              <Lock className="w-4 h-4" />
+              <span>{user ? 'Open Workspace' : 'Sign In to Portal (Super Admin, Owner, Staff)'}</span>
               <ArrowRight className="w-4 h-4" />
-            </Link>
-
-            <Link
-              href="/super-admin"
-              className="px-7 py-4 rounded-2xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm border border-slate-200 hover:border-amber-400 flex items-center gap-2.5 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-sm"
-            >
-              <Crown className="w-4 h-4 text-amber-500" />
-              <span>Super Admin Portal</span>
-            </Link>
-
-            <Link
-              href="/store/lko-01"
-              target="_blank"
-              className="px-5 py-4 rounded-2xl bg-white/80 hover:bg-white text-slate-700 hover:text-slate-900 font-semibold text-sm border border-slate-200 flex items-center gap-2 transition-all shadow-xs"
-            >
-              <Store className="w-4 h-4 text-emerald-600" />
-              <span>Customer Storefront</span>
-              <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
             </Link>
           </div>
 
@@ -798,12 +766,12 @@ export default function LandingPage() {
               </div>
               <div className="flex flex-col gap-3 w-full md:w-auto">
                 <Link
-                  href="/super-admin"
+                  href="/login"
                   className="px-6 py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-extrabold text-sm text-center shadow-md shadow-amber-500/25 transition-all hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  Enter Super Admin Console
+                  Sign In to Portal
                 </Link>
-                <span className="text-[11px] text-center text-slate-500 font-medium">Credentials: superadmin@rms.com / admin123</span>
+                <span className="text-[11px] text-center text-slate-500 font-medium">Unified access for Platform Admin & Restaurant Staff</span>
               </div>
             </div>
           </div>
@@ -850,10 +818,10 @@ export default function LandingPage() {
             </div>
             <div className="pt-8">
               <Link
-                href="/super-admin"
+                href="/login"
                 className="w-full block text-center py-2.5 rounded-xl border border-slate-200 hover:border-slate-400 bg-slate-50 hover:bg-slate-100 text-slate-800 text-xs font-bold transition-all"
               >
-                Provision via Admin
+                Sign In to Platform
               </Link>
             </div>
           </div>
@@ -886,10 +854,10 @@ export default function LandingPage() {
             </div>
             <div className="pt-8">
               <Link
-                href="/super-admin"
+                href="/login"
                 className="w-full block text-center py-2.5 rounded-xl border border-slate-200 hover:border-slate-400 bg-slate-50 hover:bg-slate-100 text-slate-800 text-xs font-bold transition-all"
               >
-                Provision via Admin
+                Sign In to Platform
               </Link>
             </div>
           </div>
@@ -929,10 +897,10 @@ export default function LandingPage() {
             </div>
             <div className="pt-8">
               <Link
-                href="/super-admin"
+                href="/login"
                 className="w-full block text-center py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-extrabold transition-all shadow-md shadow-amber-500/25"
               >
-                Provision Pro Brand
+                Sign In to Platform
               </Link>
             </div>
           </div>
@@ -969,10 +937,10 @@ export default function LandingPage() {
             </div>
             <div className="pt-8">
               <Link
-                href="/super-admin"
+                href="/login"
                 className="w-full block text-center py-2.5 rounded-xl border border-slate-200 hover:border-slate-400 bg-slate-50 hover:bg-slate-100 text-slate-800 text-xs font-bold transition-all"
               >
-                Provision via Admin
+                Sign In to Platform
               </Link>
             </div>
           </div>
@@ -1023,8 +991,7 @@ export default function LandingPage() {
           <div>
             <div className="font-bold text-white mb-3 uppercase tracking-wider text-[11px]">Platform & Auth</div>
             <ul className="space-y-2">
-              <li><Link href="/login" className="hover:text-amber-400">Staff Sign In</Link></li>
-              <li><Link href="/super-admin" className="text-amber-400 font-semibold hover:underline">Super Admin Portal</Link></li>
+              <li><Link href="/login" className="text-amber-400 font-semibold hover:underline">Unified Portal Login</Link></li>
               <li><Link href="/developers" className="hover:text-amber-400">Developer APIs</Link></li>
               <li><Link href="/accounting" className="hover:text-amber-400">Accounting P&L</Link></li>
               <li><Link href="/store/lko-01" className="hover:text-amber-400">Customer Storefront</Link></li>

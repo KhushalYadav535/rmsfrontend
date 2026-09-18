@@ -73,7 +73,7 @@ export default function SuperAdminPage() {
 
   // Check initial token
   useEffect(() => {
-    const savedToken = localStorage.getItem('rms_superadmin_token');
+    const savedToken = localStorage.getItem('rms_superadmin_token') || localStorage.getItem('rms_token');
     if (savedToken) {
       setAdminToken(savedToken);
       setIsSuperAdmin(true);
@@ -111,6 +111,8 @@ export default function SuperAdminPage() {
 
   const handleLogout = () => {
     localStorage.removeItem('rms_superadmin_token');
+    localStorage.removeItem('rms_token');
+    localStorage.removeItem('rms_outlet_id');
     setAdminToken(null);
     setIsSuperAdmin(false);
     setStats(null);
@@ -371,17 +373,23 @@ export default function SuperAdminPage() {
             </button>
           </form>
 
-          <div className="mt-6 pt-4 border-t border-slate-800 text-center">
+          <div className="mt-6 pt-4 border-t border-slate-800 text-center space-y-2">
             <button
               type="button"
               onClick={() => {
                 setLoginEmail('superadmin@rms.com');
                 setLoginPassword('admin123');
               }}
-              className="text-[11px] text-amber-400 hover:text-amber-300 font-bold"
+              className="block w-full text-[11px] text-amber-400 hover:text-amber-300 font-bold"
             >
               ⚡ Fill Default Super Admin Credentials
             </button>
+            <Link
+              href="/login"
+              className="inline-block text-[11px] text-slate-400 hover:text-white underline underline-offset-2 pt-1"
+            >
+              ← Go to Single Unified Login (/login)
+            </Link>
           </div>
         </div>
       </div>

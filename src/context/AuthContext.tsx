@@ -38,6 +38,8 @@ interface AuthContextType {
 
 export function getDefaultRouteForRole(role?: string): string {
   switch (role) {
+    case 'SUPER_ADMIN':
+      return '/super-admin';
     case 'CASHIER':
       return '/pos';
     case 'CAPTAIN':
@@ -48,7 +50,6 @@ export function getDefaultRouteForRole(role?: string): string {
       return '/inventory';
     case 'OWNER':
     case 'MANAGER':
-    case 'SUPER_ADMIN':
     default:
       return '/dashboard';
   }
@@ -96,11 +97,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (res.success && res.user) {
       setUser(res.user);
       const savedOutletId = localStorage.getItem('rms_outlet_id');
-      const matched = res.user.outlets.find((o: Outlet) => o.id === savedOutletId);
-      const selected = matched || res.user.outlets[0] || null;
+      const matched = res.user.outlets?.find((o: Outlet) => o.id === savedOutletId);
+      const selected = matched || res.user.outlets?.[0] || null;
       setCurrentOutletState(selected);
+      if (res.user.role === 'SUPER_ADMIN') {
+        localStorage.setItem('rms_superadmin_token', token);
+      }
     } else {
       localStorage.removeItem('rms_token');
+      localStorage.removeItem('rms_superadmin_token');
       if (!isPublicRoute(pathname)) router.push('/login');
     }
     setIsLoading(false);
@@ -119,8 +124,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     if (res.success && res.token && res.user) {
       localStorage.setItem('rms_token', res.token);
+      if (res.user.role === 'SUPER_ADMIN') {
+        localStorage.setItem('rms_superadmin_token', res.token);
+      }
       setUser(res.user);
-      const defaultOutlet = res.user.outlets[0] || null;
+      const defaultOutlet = res.user.outlets?.[0] || null;
       setCurrentOutletState(defaultOutlet);
       if (defaultOutlet) localStorage.setItem('rms_outlet_id', defaultOutlet.id);
       
@@ -135,6 +143,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = () => {
     localStorage.removeItem('rms_token');
     localStorage.removeItem('rms_outlet_id');
+    localStorage.removeItem('rms_superadmin_token');
     setUser(null);
     setCurrentOutletState(null);
     router.push('/login');

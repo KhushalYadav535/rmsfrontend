@@ -46,7 +46,7 @@ export default function LoginPage() {
             Royal Feast Restaurant OS
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Next-Gen Multi-Outlet POS & Operations Suite
+            Unified Portal for Super Admin, Owners, Managers & Staff
           </p>
         </div>
 
@@ -89,7 +89,7 @@ export default function LoginPage() {
               <>
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">
-                    Staff Email
+                    Email Address
                   </label>
                   <div className="relative">
                     <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
@@ -153,12 +153,28 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* 1-Click Quick Demo Switcher */}
+          {/* 1-Click Quick Demo Switcher - All Roles Unified */}
           <div className="mt-6 pt-5 border-t border-slate-100">
             <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider text-center mb-3">
               One-Click Role Switcher (Demo)
             </p>
             <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => handleQuickLogin('superadmin@rms.com', 'admin123')}
+                className="col-span-2 p-2.5 border border-amber-300 bg-amber-50/70 hover:bg-amber-100/70 rounded-xl text-left transition-all text-xs flex items-center justify-between"
+              >
+                <div>
+                  <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                    <Crown className="w-3.5 h-3.5 text-amber-600" />
+                    <span>Super Admin</span>
+                    <span className="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-amber-200 text-amber-900">PLATFORM OWNER</span>
+                  </div>
+                  <div className="text-[10px] text-slate-500 mt-0.5">Manage All Restaurants & Plans</div>
+                </div>
+                <ArrowRight className="w-3.5 h-3.5 text-amber-600" />
+              </button>
+
               <button
                 type="button"
                 onClick={() => handleQuickLogin('owner@royalfeast.com', 'admin123')}
@@ -228,28 +244,6 @@ export default function LoginPage() {
                 <div className="text-[10px] text-slate-400">Stock & Purchase</div>
               </button>
             </div>
-          </div>
-
-          {/* Super Admin Platform Access */}
-          <div className="mt-4 pt-3 border-t border-slate-100">
-            <Link
-              href="/super-admin"
-              className="flex items-center justify-between p-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white transition-all group shadow-sm"
-            >
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold">
-                  <Crown className="w-4 h-4" />
-                </div>
-                <div className="text-left">
-                  <div className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
-                    Super Admin Console
-                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">PLATFORM OWNER</span>
-                  </div>
-                  <div className="text-[10px] text-slate-400">Manage Restaurants, Plans & Onboarding</div>
-                </div>
-              </div>
-              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" />
-            </Link>
           </div>
         </div>
       </div>
